@@ -87,7 +87,11 @@ public class GeolocatorLocationService extends Service {
     if (cancellationRequested) {
       return listenerCount == 1;
     }
-    return connectedEngines == 0;
+    // We need to override this check because due to Firebase plugin there is always a connected
+    // engine which will lead to the foreground service running forever.
+    // See https://github.com/Baseflow/flutter-geolocator/issues/986#issuecomment-1595773601
+    // return connectedEngines == 0;
+    return true;
   }
 
   public void flutterEngineConnected() {
